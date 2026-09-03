@@ -7893,6 +7893,10 @@ body.chart-modal-open,body.repi-modal-open{overflow:hidden!important}
 (()=>{
   const grid=document.getElementById('repiChartGrid');if(!grid)return;
   function normalize(){
+    /* هذا التنسيق مخصص لعرض سطح المكتب فقط؛ على الجوال يتولى سكربت
+       mobile-chart-layout ترتيب هذا الرسم بطريقة لا تتداخل فيها الملصقات مع الأعمدة،
+       فإن سُمح لهذا التنسيق بالعمل أيضًا على الجوال فسيُلغي ذلك الإصلاح ويُعيد المشكلة. */
+    if(matchMedia('(max-width:767px)').matches)return;
     const card=[...grid.querySelectorAll('.repi-chart-card')].find(item=>item.querySelector('h4')?.textContent.trim()==='التوزيع حسب الجنس');if(!card)return;
     const svg=card.querySelector('.repi-chart-svg'),plot=svg?.querySelector('g[transform]');if(!svg||!plot)return;
     const male=[...plot.querySelectorAll('rect[fill="#1b8354"]')],female=[...plot.querySelectorAll('rect[fill="#00a6b2"]')],count=Math.min(male.length,female.length);if(!count)return;
@@ -8102,16 +8106,19 @@ body.chart-modal-open,body.repi-modal-open{overflow:hidden!important}
   const widths=rows.map(row=>Number(row.querySelector('rect')?.getAttribute('width'))||0),max=Math.max(1,...widths),rowH=58,height=26+rows.length*rowH,zero=180,span=145,axis=svg.querySelector('line.axis'),oldAxis=Number(axis?.getAttribute('x1'))||225;
   svg.setAttribute('viewBox',`0 0 360 ${height}`);svg.setAttribute('preserveAspectRatio','xMidYMin meet');
   if(axis){axis.setAttribute('x1',zero);axis.setAttribute('x2',zero);axis.setAttribute('y1','24');axis.setAttribute('y2',String(height-12))}
-  rows.forEach((row,i)=>{const y=12+i*rowH,label=row.querySelector('text.cl'),bar=row.querySelector('rect'),value=row.querySelector('text.cv'),oldX=Number(bar.getAttribute('x'))||0,negative=oldX<oldAxis,w=Math.max(2,(Number(bar.getAttribute('width'))||0)/max*span),x=negative?zero-w:zero;label.setAttribute('x','346');label.setAttribute('y',String(y+15));label.setAttribute('text-anchor','end');bar.setAttribute('x',String(x));bar.setAttribute('y',String(y+25));bar.setAttribute('width',String(w));bar.setAttribute('height','19');bar.setAttribute('rx','3');if(value){const nearEdge=negative?x<48:x+w>295;value.setAttribute('x',String(negative?(nearEdge?x+4:x-5):(nearEdge?x+w-4:x+w+5)));value.setAttribute('y',String(y+40));value.setAttribute('text-anchor',negative?(nearEdge?'start':'end'):(nearEdge?'end':'start'))}});
+  rows.forEach((row,i)=>{const y=12+i*rowH,label=row.querySelector('text.cl'),bar=row.querySelector('rect'),value=row.querySelector('text.cv'),oldX=Number(bar.getAttribute('x'))||0,negative=oldX<oldAxis,w=Math.max(2,(Number(bar.getAttribute('width'))||0)/max*span),x=negative?zero-w:zero;label.setAttribute('x','346');label.setAttribute('y',String(y+15));label.setAttribute('text-anchor','end');bar.setAttribute('x',String(x));bar.setAttribute('y',String(y+25));bar.setAttribute('width',String(w));bar.setAttribute('height','19');bar.setAttribute('rx','3');if(value){const nearEdge=negative?x<48:x+w>295;value.setAttribute('x',String(negative?(nearEdge?x+4:x-5):(nearEdge?x+w-4:x+w+5)));value.setAttribute('y',String(y+40));value.setAttribute('text-anchor',negative?(nearEdge?'start':'end'):(nearEdge?'end':'start'));value.style.fill=nearEdge?'#fff':'';value.style.fontWeight=nearEdge?'700':''}});
   svg.dataset.mobileRanking='true';
  }
  function gender(svg){
   if(svg.dataset.mobileGender==='true')return;
   const rows=[...svg.querySelectorAll('g.gender-row')];if(!rows.length)return;
-  const bars=rows.flatMap(row=>[...row.querySelectorAll('rect')]),max=Math.max(1,...bars.map(bar=>Number(bar.getAttribute('width'))||0)),rowH=74,height=26+rows.length*rowH,start=92,span=245;
+  /* الملصق (اسم الفئة) كان يوضع بمحاذاة أطول الأعمدة أفقيًا، فيتداخل معها بصريًا عند
+     اقتراب قيمتها من الحد الأقصى. أصبح الآن يوضع فوق كل زوج من الأعمدة (ذكور/إناث)
+     بدل أن يكون بينهما أو بمحاذاتها، بنفس أسلوب رسم الترتيب الذي لا يواجه هذه المشكلة. */
+  const bars=rows.flatMap(row=>[...row.querySelectorAll('rect')]),max=Math.max(1,...bars.map(bar=>Number(bar.getAttribute('width'))||0)),rowH=80,height=26+rows.length*rowH,start=92,span=245;
   svg.setAttribute('viewBox',`0 0 360 ${height}`);svg.setAttribute('preserveAspectRatio','xMidYMin meet');
   const plot=svg.querySelector('.gender-plot');if(plot)plot.setAttribute('transform','translate(0 0)');
-  rows.forEach((row,i)=>{const y=10+i*rowH,label=row.querySelector('text'),pair=[...row.querySelectorAll('rect')];if(label){label.setAttribute('x','346');label.setAttribute('y',String(y+15));label.setAttribute('text-anchor','end')}pair.forEach((bar,j)=>{bar.setAttribute('x',String(start));bar.setAttribute('y',String(y+25+j*23));bar.setAttribute('width',String(Math.max(2,(Number(bar.getAttribute('width'))||0)/max*span)));bar.setAttribute('height','17');bar.setAttribute('rx','3')})});
+  rows.forEach((row,i)=>{const y=10+i*rowH,label=row.querySelector('text'),pair=[...row.querySelectorAll('rect')];if(label){label.setAttribute('x','346');label.setAttribute('y',String(y+13));label.setAttribute('text-anchor','end')}pair.forEach((bar,j)=>{bar.setAttribute('x',String(start));bar.setAttribute('y',String(y+22+j*22));bar.setAttribute('width',String(Math.max(2,(Number(bar.getAttribute('width'))||0)/max*span)));bar.setAttribute('height','17');bar.setAttribute('rx','3')})});
   svg.dataset.mobileGender='true';
  }
  function apply(){if(!mobile())return;grid.querySelectorAll('.repi-chart-svg').forEach(svg=>{gender(svg);ranking(svg)})}
@@ -11054,12 +11061,24 @@ addEventListener('load',send);new ResizeObserver(send).observe(document.getEleme
 @media(max-width:900px){
   #dataTablePanel .table-chart-split{margin:0 14px 18px!important;width:calc(100% - 28px)!important;gap:14px!important}
   #dataTablePanel .table-chart-pane-table .table-wrap{max-height:320px!important}
-  #dataTablePanel .table-chart-pane-chart .dataset-chart-section{max-height:400px!important}
+  #dataTablePanel .table-chart-pane-chart .dataset-chart-section{max-height:460px!important}
 }
+/* الجوال: الرسم كان يظهر مضغوطًا جدًا (رأس البطاقة والأزرار تستهلك أغلب الإطار ولا تترك
+   مساحة كافية لرؤية الرسم نفسه) — تم توسيع إطار الرسم وتصغير رأس البطاقة قليلًا على
+   الجوال فقط لإعطاء الرسم البياني مساحة أوضح وأسهل للقراءة. */
 @media(max-width:600px){
   #dataTablePanel .table-chart-split{margin:0 10px 15px!important;width:calc(100% - 20px)!important}
   #dataTablePanel .table-chart-pane-table .table-wrap{max-height:280px!important}
-  #dataTablePanel .table-chart-pane-chart .dataset-chart-section{max-height:360px!important}
+  #dataTablePanel .table-chart-pane-chart .dataset-chart-section{max-height:500px!important}
+  #dataTablePanel .table-chart-pane-chart .repi-chart-head{padding:10px 12px 7px!important}
+  #dataTablePanel .table-chart-pane-chart .repi-chart-head h4{font-size:14px!important;margin:0 0 3px!important;line-height:1.35!important}
+  #dataTablePanel .table-chart-pane-chart .repi-chart-head p{font-size:11px!important;margin:0!important}
+  #dataTablePanel .table-chart-pane-chart .repi-chart-actions{margin-bottom:7px!important;gap:6px!important}
+  #dataTablePanel .table-chart-pane-chart .chart-metric-label{font-size:11px!important;margin-top:5px!important}
+  #dataTablePanel .table-chart-pane-chart .repi-chart-body{padding:6px!important}
+  /* تقليل الحشوة الجانبية حول الرسم لإعطاء الرسم نفسه أكبر مساحة أفقية ممكنة على الجوال */
+  #dataTablePanel .table-chart-pane-chart #datasetChartMount{padding:0 6px 10px!important}
+  #dataTablePanel .table-chart-pane-chart .repi-chart-grid{gap:10px!important}
 }
 </style>
 </body>
