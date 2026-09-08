@@ -6932,7 +6932,6 @@ body.chart-modal-open,body.repi-modal-open{overflow:hidden!important}
       <div class="nds-tab-list view-tabs" role="tablist" aria-label="طرق عرض محتوى النشرة">
         <button class="nds-btn nds-secondary nds-tab view-tab active" id="dataTableTab" type="button" role="tab" aria-selected="true" tabindex="0" aria-controls="dataTablePanel"><span class="view-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 10h16M10 5v14M15 19v-5m3 5V9m3 10v-8"/></svg></span><span class="nds-label">الجداول والرسوم البيانية</span></button>
         <button class="nds-btn nds-secondary nds-tab view-tab" id="chartsTab" type="button" role="tab" aria-selected="false" tabindex="-1" aria-controls="chartsPanel"><span class="view-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19h16M6 16v-5m5 5V7m5 9V4m4 12V9"/></svg></span><span class="nds-label">لوح المعلومات</span></button>
-        <button class="nds-btn nds-secondary nds-tab view-tab" id="compareTab" type="button" role="tab" aria-selected="false" tabindex="-1" aria-controls="comparePanel"><span class="view-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 7h13m0 0-3-3m3 3-3 3M17 17H4m0 0 3-3m-3 3 3 3"/></svg></span><span class="nds-label">مقارنة البيانات</span></button>
         <button class="nds-btn nds-secondary nds-tab view-tab" id="methodologyTab" type="button" role="tab" aria-selected="false" tabindex="-1" aria-controls="methodologyPanel"><span class="view-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4h12v16H6zM9 8h6m-6 4h6m-6 4h4"/></svg></span><span class="nds-label">المنهجية</span></button>
       </div>
       <div class="nds-tab-panel view-panel" id="dataTablePanel" role="tabpanel" tabindex="0" aria-labelledby="dataTableTab">
@@ -7030,35 +7029,6 @@ body.chart-modal-open,body.repi-modal-open{overflow:hidden!important}
         </style>
         <div class="repi-charts-intro comparison-intro"><div><span class="comparison-kicker">عرض بصري تفاعلي</span><h3>الرسومات البيانية لأسعار العقارات</h3><p>استكشف بيانات الجداول نفسها بصريًا — الربع الثاني 2026.</p></div><span class="comparison-limit">4 رسوم تفاعلية</span></div>
         <div class="repi-chart-grid" id="repiChartGrid"></div>
-      </div>
-      <div class="nds-tab-panel view-panel comparison-panel" id="comparePanel" tabindex="-1" aria-hidden="true" role="tabpanel" aria-labelledby="compareTab" hidden>
-        <div class="comparison-intro">
-          <div><span class="comparison-kicker">أداة تحليل تفاعلية</span><h3>مقارنة بيانات العمرة</h3><p>اختر جدولًا ومؤشرين، ثم قارن القيم والفروق بين عناصر الجدول مباشرة.</p></div>
-          <span class="comparison-limit">يمكن اختيار 4 عناصر كحد أقصى</span>
-        </div>
-        <div class="comparison-controls" aria-label="خيارات المقارنة">
-          <div class="comparison-field"><label for="comparisonScope">مجال المقارنة</label><select id="comparisonScope"></select></div>
-          <div class="comparison-field"><label for="comparisonDataset">جدول المقارنة</label><select id="comparisonDataset"></select></div>
-          <div class="comparison-field"><label for="comparisonCurrent">المقياس الأساسي</label><select id="comparisonCurrent"></select></div>
-          <button class="comparison-swap" id="comparisonSwap" type="button" title="تبديل المقياسين" aria-label="تبديل المقياس الأساسي والمقياس المرجعي"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3M18 7l-3 3M6 17l3-3"/></svg></button>
-          <div class="comparison-field"><label for="comparisonBase">المقياس المرجعي</label><select id="comparisonBase"></select></div>
-        </div>
-        <fieldset class="comparison-items"><legend>عناصر المقارنة</legend><div class="comparison-checks" id="comparisonChecks"></div></fieldset>
-        <div class="comparison-actions">
-          <button type="button" id="comparisonReset">إعادة ضبط</button>
-          <button type="button" id="comparisonShare">نسخ رابط المقارنة</button>
-          <button type="button" id="comparisonExcel">تنزيل Excel</button>
-          <button type="button" id="comparisonPdf" aria-describedby="comparisonPdfHint">PDF / طباعة</button>
-          <button type="button" id="comparisonPng">PNG</button>
-          <button type="button" id="comparisonSvg">SVG</button>
-        </div><p class="comparison-pdf-hint" id="comparisonPdfHint">يفتح معاينة الطباعة؛ اختر «حفظ كملف PDF» لتنزيل التقرير.</p>
-        <div class="comparison-summary" id="comparisonSummary" aria-live="polite"></div>
-        <div class="comparison-visual">
-          <div class="comparison-visual-head"><div><h4 id="comparisonChartTitle">مقارنة مباشرة بين مقياسين</h4><p id="comparisonChartSubtitle"></p></div><div class="comparison-chart-toolbar"><div class="comparison-legend"><span><i class="current"></i>المقياس الأساسي</span><span><i class="base"></i>المقياس المرجعي</span></div><label for="comparisonSort">ترتيب النتائج</label><select id="comparisonSort"><option value="default">الترتيب الأصلي</option><option value="increase">أعلى فارق نسبي</option><option value="decrease">أدنى فارق نسبي</option><option value="current">أعلى قيمة أساسية</option></select><button id="comparisonClearFocus" type="button" hidden>إظهار الكل</button></div></div>
-          <div class="comparison-chart-wrap"><svg id="comparisonChart" viewBox="0 0 900 420" role="img" aria-label="رسم مقارنة بيانات العمرة"></svg><div class="comparison-chart-tooltip" id="comparisonChartTooltip" hidden></div></div>
-        </div>
-        <div class="comparison-table-head"><div><h4>جدول نتائج المقارنة</h4><p>قارن بين مقياسين من الوحدة نفسها لضمان تفسير إحصائي صحيح.</p></div><span id="comparisonResultCount"></span></div>
-          <div class="comparison-table-wrap" tabindex="0" role="region" aria-label="جدول نتائج المقارنة — يمكن التمرير أفقيًا"><table><colgroup><col class="comparison-col-name"><col class="comparison-col-value"><col class="comparison-col-value"><col class="comparison-col-change"><col class="comparison-col-change"></colgroup><thead><tr><th>العنصر</th><th id="comparisonCurrentHead">المقياس الأساسي</th><th id="comparisonBaseHead">المقياس المرجعي</th><th>الفرق</th><th>الفارق النسبي</th></tr></thead><tbody id="comparisonTableBody"></tbody></table></div>
       </div>
       <div class="nds-tab-panel view-panel methodology-panel" id="methodologyPanel" role="tabpanel" tabindex="-1" aria-hidden="true" aria-labelledby="methodologyTab" hidden><div class="support-content methodology-content">
           <div class="methodology-intro">
